@@ -24,7 +24,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             cursor = conn.cursor()
             cursor.execute("SELECT tGenres.genre, AVG(tTitles.averageRating) AS averageGenreRate FROM tGenres JOIN tTitles ON tTitles.tconst = tGenres.tconst WHERE tTitles.averageRating IS NOT NULL GROUP BY tGenres.genre ORDER BY averageGenreRate DESC")
             rows = cursor.fetchall()
-            dataString = "Requesting Average Rate By Genre Using SQL: \n "
+            dataString = "Requesting Average Rate By Genre Using SQL: \n"
             for row in rows:
                 dataString += f"genre={row[0]}, averageGenreRate={row[1]}\n"
     except:
@@ -34,4 +34,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(dataString + errorMessage, status_code=500)
 
     else:
-        return func.HttpResponse(dataString + " Connexions réussies a SQL!")
+        return func.HttpResponse(dataString + " Connexion réussie a SQL!")
