@@ -11,7 +11,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     neo4j_user = os.environ["TPBDD_NEO4J_USER"]
     neo4j_password = os.environ["TPBDD_NEO4J_PASSWORD"]
 
-    if len(server)==0 or len(database)==0 or len(username)==0 or len(password)==0 or len(neo4j_server)==0 or len(neo4j_user)==0 or len(neo4j_password)==0:
+    if len(neo4j_server)==0 or len(neo4j_user)==0 or len(neo4j_password)==0:
         return func.HttpResponse("Au moins une des variables d'environnement n'a pas été initialisée.", status_code=500)
         
     errorMessage = ""
@@ -25,9 +25,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             dataString += f"primaryName={row['n.primaryName']}, primaryTitle={row['t1.primaryTitle']}\n"
     except:
         errorMessage = "Erreur de connexion a la base Neo4j"
-          
+    
     if errorMessage != "":
         return func.HttpResponse(dataString + errorMessage, status_code=500)
-
+        
     else:
         return func.HttpResponse(dataString + " Connexion réussie a Neo4j")
