@@ -30,7 +30,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         errorMessage = "Erreur de connexion a la base SQL"
         
     if errorMessage != "":
-        return func.HttpResponse(dataString + nameMessage + errorMessage, status_code=500)
+        return func.HttpResponse(dataString + errorMessage, status_code=500)
 
     else:
-        return func.HttpResponse(dataString + nameMessage + " Connexions réussies a SQL!")
+        return func.HttpResponse(dataString + " Connexions réussies a SQL!")
