@@ -49,7 +49,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             cursor.execute(f"SELECT AVG(tTitles.runtimeMinutes) AS averageRuntime FROM tTitles WHERE runtimeMinutes IS NOT NULL {get_query_condition(genre, actor, director)}")
 
             rows = cursor.fetchall()
-            dataString=f"le temps moyen des films respectant les critères suivant acteur={actor if len(actor)!=0 else 'ALL'}, directeur={director if len(director)!=0 else 'ALL'}, genre={genre if len(genre)!=0 else 'ALL'} est {rows[0][0]}"
+            dataString=f"le temps moyen des films respectant les critères suivant acteur={actor if actor else 'ALL'}, directeur={director if director else 'ALL'}, genre={genre if genre else 'ALL'} est {rows[0][0]}"
 
     except:
         errorMessage = "Erreur de connexion a la base SQL"
