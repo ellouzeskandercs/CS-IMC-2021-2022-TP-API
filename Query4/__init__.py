@@ -51,7 +51,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             rows = cursor.fetchall()
             dataString=f"le temps moyen des films respectant les critères suivant acteur={actor if len(actor)!=0 else 'ALL'}, directeur={director if len(director)!=0 else 'ALL'}, genre={genre if len(genre)!=0 else 'ALL'} est {rows[0][0]}"
 
-    except
+    except:
         errorMessage = "Erreur de connexion a la base SQL"
     
     if errorMessage != "":
