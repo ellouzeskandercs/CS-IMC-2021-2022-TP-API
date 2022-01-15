@@ -5,20 +5,31 @@ import azure.functions as func
 
 def get_query_condition(genre, actor, director) : 
     query = ""
-    if(len(actor)!=0):
+    if(actor):
         query+= f" AND tTitles.tconst IN ( SELECT tconst FROM tPrincipals WHERE tPrincipals.nconst = '{actor}' AND tPrincipals.category = 'acted in')"
-    if(len(director)!=0):
+    if(director):
         query+= f" AND tTitles.tconst IN ( SELECT tconst FROM tPrincipals WHERE tPrincipals.nconst = '{director}' AND tPrincipals.category = 'directed')"
-    if(len(genre)!=0):
+    if(genre):
         query+= f" AND tTitles.tconst IN ( SELECT tconst FROM tGenres WHERE genre='{genre}')"
     return query
+
+def get_url_param(req, param_name):
+    param = req.params.get(param_name)
+    if not param:
+        try:
+            req_body = req.get_json()
+        except ValueError:
+            pass
+        else:
+            param = req_body.get(param_name)
+    return param
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    genre = req.params.get('genre')
-    actor = req.params.get('actor')
-    director = req.params.get('director')
+    genre = get_url_param(req, 'genre')
+    actor = get_url_param(req, 'actor')
+    director = get_url_param(req, 'director')
 
     server = os.environ["TPBDD_SERVER"]
     database = os.environ["TPBDD_DB"]
