@@ -34,4 +34,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(dataString + errorMessage, status_code=500)
 
     else:
-        return func.HttpResponse(dataString + " Connexion réussie a SQL!")
+        return func.HttpResponse(dataString + "\n Connexion réussie a SQL!")

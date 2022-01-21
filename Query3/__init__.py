@@ -19,7 +19,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         logging.info("Test de connexion avec py2neo...")
         graph = Graph(neo4j_server, auth=(neo4j_user, neo4j_password))
-        artistsAndMovies = graph.run("MATCH (t1:Title)<-[r1]-(n:Name)-[r2]->(t2:Title) WHERE type(r1)<>type(r2) AND t1.tconst=t2.tconst RETURN DISTINCT n.primaryName, t1.primaryTitle ORDER BY n.primaryName")
+        artistsAndMovies = graph.run("MATCH (t1:Film)<-[r1]-(n:Artist)-[r2]->(t2:Film) WHERE type(r1)<>type(r2) AND t1.idFilm=t2.idFilm RETURN DISTINCT n.primaryName, t1.primaryTitle ORDER BY n.primaryName")
         dataString="Requesting artists playing two roles in the same movie Using Cypher"
         for row in artistsAndMovies:
             dataString += f"primaryName={row['n.primaryName']}, primaryTitle={row['t1.primaryTitle']}\n"
@@ -30,4 +30,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(dataString + errorMessage, status_code=500)
         
     else:
-        return func.HttpResponse(dataString + " Connexion réussie a Neo4j")
+        return func.HttpResponse(dataString + "\n Connexion réussie a Neo4j")
