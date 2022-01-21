@@ -22,11 +22,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         logging.info("Test de connexion avec pyodbc...")
         with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) as conn:
             cursor = conn.cursor()
-            cursor.execute("SELECT tGenres.genre, AVG(tTitles.averageRating) AS averageGenreRate FROM tGenres JOIN tTitles ON tTitles.tconst = tGenres.tconst WHERE tTitles.averageRating IS NOT NULL GROUP BY tGenres.genre ORDER BY averageGenreRate DESC")
+            cursor.execute("SELECT DISTINCT tGenres.genre FROM tGenres JOIN tTitles ON tTitles.tconst = tGenres.tconst WHERE  tTitles.tconst IN (SELECT tPrincipals.tconst FROM tTitles JOIN tPrincipals ON tTitles.tconst=tPrincipals.tconst JOIN tNames ON tNames.nconst=tPrincipals.nconst GROUP BY tPrincipals.tconst, tPrincipals.nconst HAVING COUNT(DISTINCT tPrincipals.category)>1) ORDER BY tGenres.genre")
             rows = cursor.fetchall()
             dataString = "Requesting Average Rate By Genre Using SQL: \n"
             for row in rows:
-                dataString += f"genre={row[0]}, averageGenreRate={row[1]}\n"
+                dataString += f"genre={row[0]}\n"
     except:
         errorMessage = "Erreur de connexion a la base SQL"
         
